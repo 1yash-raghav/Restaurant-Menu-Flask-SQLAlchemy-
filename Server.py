@@ -17,6 +17,7 @@ def restaurants():
     restaurants = session.query(Restaurant).all()
     return render_template('restaurants.html', restaurants=restaurants)
 
+
 @app.route('/restaurants/new', methods={'GET', 'POST'})
 def addNewRestaurant():
     if(request.method == "POST"):
@@ -28,7 +29,6 @@ def addNewRestaurant():
         return redirect(url_for("restaurants"))
     else:
         return render_template('NewRestaurant.html')
-
 
 @app.route('/restaurants/<int:restaurant_id>/delete', methods={'GET', 'POST'})
 def DeleteRestaurant(restaurant_id):
