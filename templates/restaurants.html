@@ -8,6 +8,7 @@
 
         <p>{{i.name}}</p>
         <a href="{{url_for('restaurantMenu', restaurant_id=i.id)}}">ENTER</a>
+        <a href="{{url_for('DeleteRestaurant', restaurant_id=i.id)}}">DELETE</a>
         </br>
         </br>
     </div>
