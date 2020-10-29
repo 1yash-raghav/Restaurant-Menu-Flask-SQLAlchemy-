@@ -1,5 +1,5 @@
 from CreateDB import Base, Restaurant, MenuItem
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 app = Flask(__name__)
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -24,6 +24,7 @@ def addNewRestaurant():
             name=request.form['name'])
         session.add(newRestaurant)
         session.commit()
+        flash("New Restaurant Added!")
         return redirect(url_for("restaurants"))
     else:
         return render_template('NewRestaurant.html')
@@ -36,6 +37,7 @@ def DeleteRestaurant(restaurant_id):
     if(request.method == 'POST'):
         session.delete(itemToDelete)
         session.commit()
+        flash("Restaurant Entry Deleted!")
         return redirect(url_for("restaurants"))
     else:
         return render_template('deleteItem.html')
@@ -54,6 +56,7 @@ def addNewItem(restaurant_id):
         newItem = MenuItem(name=request.form['name'], price = "$ "+request.form['price'], restaurant_id=restaurant_id)
         session.add(newItem)
         session.commit()
+        flash("New Item Added!")
         return redirect(url_for("restaurantMenu", restaurant_id=restaurant_id))
     else:
         return render_template('NewItem.html', restaurant_id=restaurant_id)
@@ -67,6 +70,7 @@ def EditItem(restaurant_id, menu_id):
         oldItem.name = request.form['name']
         session.add(oldItem)
         session.commit()
+        flash("Item Edited!")
         return redirect(url_for("restaurantMenu", restaurant_id=restaurant_id))
     else:
         return render_template('EditItem.html', restaurant_id=restaurant_id, menu_id=menu_id)
@@ -78,6 +82,7 @@ def DeleteItem(restaurant_id, menu_id):
     if(request.method == 'POST'):
         session.delete(itemToDelete)
         session.commit()
+        flash("Item Deleted!")
         return redirect(url_for("restaurantMenu", restaurant_id=restaurant_id))
     else:
         return render_template('deleteItem.html')
@@ -85,5 +90,6 @@ def DeleteItem(restaurant_id, menu_id):
 
 
 if __name__ == '__main__':
+    app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
