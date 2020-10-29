@@ -12,6 +12,23 @@ session = DBSession()
 
 
 @app.route('/')
+@app.route('/restaurants/')
+def restaurants():
+    restaurants = session.query(Restaurant).all()
+    return render_template('restaurants.html', restaurants=restaurants)
+
+
+@app.route('/restaurants/new', methods={'GET', 'POST'})
+def addNewRestaurant():
+    if(request.method == "POST"):
+        newRestaurant = Restaurant(
+            name=request.form['name'])
+        session.add(newRestaurant)
+        session.commit()
+        return redirect(url_for("restaurants"))
+    else:
+        return render_template('NewRestaurant.html')
+
 @app.route('/restaurants/<int:restaurant_id>/')
 def restaurantMenu(restaurant_id):
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
